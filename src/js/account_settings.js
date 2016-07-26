@@ -3,11 +3,11 @@ import * as URI from 'urijs';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
-    return response
+    return response;
   } else {
-    var error = new Error(response.statusText)
-    error.response = response
-    throw error
+    var error = new Error(response.statusText);
+    error.response = response;
+    throw error;
   }
 }
 
@@ -23,15 +23,16 @@ function handleError(error) {
  *
  */
 export default function(root) {
+		var _url = URI(root + 'account/settings');
     return {
 
-        url: URI(root + 'account/settings'),
+        url: _url,
 
         /**
          *
          */
         getSettings: function() {
-            return fetch(url.toString())
+            return fetch(_url.toString())
                 .then(checkStatus)
                 .then(parseJSON)
                 .catch(handleError);
@@ -41,7 +42,7 @@ export default function(root) {
          *
          */
         updateSettings: function(settings) {
-            return fetch(url.toString(), {
+            return fetch(_url.toString(), {
                 method: 'POST',
                 body: settings
             })
@@ -50,4 +51,4 @@ export default function(root) {
                 .catch(handleError);
         }
     };
-};
+}
