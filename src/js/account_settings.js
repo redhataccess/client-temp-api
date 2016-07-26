@@ -1,4 +1,4 @@
-import 'whatg-fetch';
+import 'fetch';
 import * as URI from 'urijs';
 
 function checkStatus(response) {
