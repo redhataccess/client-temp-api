@@ -6,7 +6,7 @@
     "Jordan Eudy <jeudy100@gmail.com>"
   ],
   "description": "Client API for Red Hat Insights",
-  "main": "./src/js/account_settings.js",
+  "main": "dist/js/account_settings.js",
   "keywords": [
     "Insights",
     "API"
@@ -18,7 +18,9 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "gulpfile.js",
+    "src"
   ],
   "dependencies": {
     "es6-promise": "^3.2.2",

@@ -1,0 +1,30 @@
+{
+  "name": "insights-api",
+  "version": "1.0.0",
+  "description": "Client API for Red Hat Insights",
+  "main": "index.js",
+  "dependencies": {
+    "babel-core": "^6.11.4"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "gulp-babel": "^6.1.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Prosper95/insights-api.git"
+  },
+  "keywords": [
+    "Insights",
+    "API"
+  ],
+  "author": " Stephen Worley <sworley1995@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Prosper95/insights-api/issues"
+  },
+  "homepage": "https://github.com/Prosper95/insights-api#readme"
+}

@@ -22,7 +22,7 @@ function handleError(error) {
 /**
  *
  */
-export default function(root) {
+export function init(root) {
 		var _url = URI(root + 'account/settings');
     return {
 
