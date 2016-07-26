@@ -25,29 +25,29 @@ function handleError(error) {
 export default function(root) {
     return {
 
-        url : URI(root + 'account/settings');
+        url: URI(root + 'account/settings'),
 
         /**
          *
          */
         getSettings: function() {
-            fetch(url.toString())
+            return fetch(url.toString())
                 .then(checkStatus)
                 .then(parseJSON)
                 .catch(handleError);
-        };
+        },
 
         /**
          *
          */
         updateSettings: function(settings) {
-            fetch(url.toString(), {
+            return fetch(url.toString(), {
                 method: 'POST',
                 body: settings
             })
                 .then(checkStatus)
                 .then(parseJSON)
                 .catch(handleError);
-        };
+        }
     };
 };
