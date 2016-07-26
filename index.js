@@ -1,2 +1,2 @@
 import './src/js' as api;
-export api;
+export default api;
