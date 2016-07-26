@@ -6,7 +6,7 @@
     "Jordan Eudy <jeudy100@gmail.com>"
   ],
   "description": "Client API for Red Hat Insights",
-  "main": "/src/js/index.js",
+  "main": "index.js",
   "keywords": [
     "Insights",
     "API"
