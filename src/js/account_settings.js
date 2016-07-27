@@ -1,5 +1,6 @@
 import 'fetch';
-import * as URI from 'urijs';
+import 'es6-promise';
+import URI from 'urijs';
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -26,7 +27,7 @@ export function init(root) {
 		var _url = URI(root + 'account/settings');
     return {
 
-        url: _url,
+        url: _url.toString(),
 
         /**
          *

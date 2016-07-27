@@ -3,39 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-exports.default = function (root) {
-    var _url = URI(root + 'account/settings');
-    return {
-
-        url: _url,
-
-        /**
-         *
-         */
-        getSettings: function getSettings() {
-            return fetch(_url.toString()).then(checkStatus).then(parseJSON).catch(handleError);
-        },
-
-        /**
-         *
-         */
-        updateSettings: function updateSettings(settings) {
-            return fetch(_url.toString(), {
-                method: 'POST',
-                body: settings
-            }).then(checkStatus).then(parseJSON).catch(handleError);
-        }
-    };
-};
+exports.init = init;
 
 require('fetch');
 
+require('es6-promise');
+
 var _urijs = require('urijs');
 
-var URI = _interopRequireWildcard(_urijs);
+var _urijs2 = _interopRequireDefault(_urijs);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
@@ -58,3 +36,27 @@ function handleError(error) {
 /**
  *
  */
+function init(root) {
+    var _url = (0, _urijs2.default)(root + 'account/settings');
+    return {
+
+        url: _url.toString(),
+
+        /**
+         *
+         */
+        getSettings: function getSettings() {
+            return fetch(_url.toString()).then(checkStatus).then(parseJSON).catch(handleError);
+        },
+
+        /**
+         *
+         */
+        updateSettings: function updateSettings(settings) {
+            return fetch(_url.toString(), {
+                method: 'POST',
+                body: settings
+            }).then(checkStatus).then(parseJSON).catch(handleError);
+        }
+    };
+}
