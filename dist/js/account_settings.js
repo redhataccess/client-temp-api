@@ -7,7 +7,7 @@ exports.init = init;
 
 require('fetch');
 
-require('babel/babel-polyfill');
+require('babel/browser-polyfill');
 
 var _urijs = require('urijs');
 
@@ -16,6 +16,8 @@ var _urijs2 = _interopRequireDefault(_urijs);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function checkStatus(response) {
+    console.log('Checking status');
+    console.log(response);
     if (response.status >= 200 && response.status < 300) {
         return response;
     } else {
@@ -26,11 +28,12 @@ function checkStatus(response) {
 }
 
 function parseJSON(response) {
+    console.log('Parsing json');
     return response.json();
 }
 
 function handleError(error) {
-    console.log('request faild', error);
+    console.log('request failed', error);
 }
 
 /**
@@ -46,7 +49,7 @@ function init(root) {
          *
          */
         getSettings: function getSettings() {
-            return fetch(_url.toString()).then(checkStatus).then(parseJSON).catch(handleError);
+            fetch(_url.toString()).then(checkStatus).then(parseJSON).catch(handleError);
         },
 
         /**
