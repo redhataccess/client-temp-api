@@ -49,7 +49,7 @@ function init(root) {
          *
          */
         getSettings: function getSettings() {
-            fetch(_url.toString()).then(checkStatus).then(parseJSON).catch(handleError);
+            return fetch(_url.toString()).then(checkStatus(response)).then(parseJSON(response)).catch(handleError(error));
         },
 
         /**

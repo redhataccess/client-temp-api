@@ -36,10 +36,10 @@ export function init(root) {
          *
          */
         getSettings: function() {
-                fetch(_url.toString())
-                .then(checkStatus)
-                .then(parseJSON)
-                .catch(handleError);
+                return fetch(_url.toString())
+                .then(checkStatus(response))
+                .then(parseJSON(response))
+                .catch(handleError(error));
         },
 
         /**
