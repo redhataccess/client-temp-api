@@ -7,7 +7,7 @@ exports.init = init;
 
 require('fetch');
 
-require('es6-promise');
+require('babel/babel-polyfill');
 
 var _urijs = require('urijs');
 

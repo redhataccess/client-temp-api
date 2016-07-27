@@ -1,5 +1,5 @@
 import 'fetch';
-import 'es6-promise';
+import 'babel/polyfill';
 import URI from 'urijs';
 
 function checkStatus(response) {
