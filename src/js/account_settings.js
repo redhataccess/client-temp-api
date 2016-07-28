@@ -36,10 +36,27 @@ export function init(root) {
          *
          */
         getSettings: function() {
-                return fetch(_url.toString())
-                .then(checkStatus(response))
-                .then(parseJSON(response))
-                .catch(handleError(error));
+            return fetch(_url.toString(), {
+                credentials: 'same-origin'
+            })
+            .then(function (response) {
+                console.log('Checking status');
+                console.log(response);
+                if (response.status >= 200 && response.status < 300) {
+                    return response;
+                } else {
+                    var error = new Error(response.statusText);
+                    error.response = response;
+                    throw error;
+                }
+            })
+            .then(function (response) {
+                console.log('Parsing json');
+                return response.json();
+            })
+            .catch(function (error) {
+                console.log('request failed', error);
+            });
         },
 
         /**
