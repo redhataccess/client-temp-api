@@ -20,15 +20,14 @@ var _bluebird2 = _interopRequireDefault(_bluebird);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// nnPromise = non native Promise
-//import {polyfill} from 'es6-promise';
-fetch.Promise = _bluebird2.default;
+//polyfill();
+//fetch.Promise = Promise;
 /**
  * @return {JSON} Json object containing the functions needed
  * 						 for client-to-server communication.
  */
 function Account() {
-    var _url = (0, _urijs2.default)();
+    var _url = (0, _urijs2.default)('');
     return {
         url: _url.toString(),
 
@@ -56,8 +55,10 @@ function Account() {
 /**
  *
  */
+
+//import {polyfill} from 'es6-promise';
 function AccountSettings() {
-    var _url = (0, _urijs2.default)();
+    var _url = (0, _urijs2.default)('');
     return {
 
         url: _url.toString(),
@@ -67,7 +68,7 @@ function AccountSettings() {
          */
         init: function init(root) {
             _url.pathname(root);
-            _url.segment('account/products');
+            _url.segment('account/settings');
         },
 
         /**
@@ -81,10 +82,7 @@ function AccountSettings() {
             myHeaders.append('X-Omit', 'WWW-Authenticate');
             //myHeaders.append('cache-control', 'cache');
             return fetch(_url.toString(), {
-                credentials: 'same-origin',
-                cache: 'default',
-                //mode: 'no-cors',
-                headers: myHeaders
+                credentials: 'same-origin'
             }).then(checkStatus).then(parseJSON).catch(handleError);
         },
 
@@ -101,7 +99,7 @@ function AccountSettings() {
 }
 function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
-        return response;
+        return _bluebird2.default.resolve(response);
     } else {
         var error = new Error(response.statusText);
         error.response = response;

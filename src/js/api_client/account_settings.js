@@ -2,7 +2,7 @@
  *
  */
 export function AccountSettings() {
-    var _url = URI();
+    var _url = URI('');
     return {
 
         url: _url.toString(),
@@ -12,7 +12,7 @@ export function AccountSettings() {
          */
         init: function (root) {
             _url.pathname(root);
-            _url.segment('account/products');
+            _url.segment('account/settings');
         },
 
         /**
@@ -27,9 +27,9 @@ export function AccountSettings() {
             //myHeaders.append('cache-control', 'cache');
             return fetch(_url.toString(), {
                 credentials: 'same-origin',
-                cache: 'default',
+                //cache: 'default',
                 //mode: 'no-cors',
-                headers: myHeaders
+                //headers: myHeaders
             })
                 .then(checkStatus)
                 .then(parseJSON)

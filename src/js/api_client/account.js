@@ -3,7 +3,7 @@
  * 						 for client-to-server communication.
  */
 export function Account() {
-	var _url = URI();
+	var _url = URI('');
 	return {
 		url: _url.toString(),
 
