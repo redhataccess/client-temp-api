@@ -2,7 +2,7 @@
  *
  */
 export function AccountSettings() {
-    var _url = new URI();
+    var _url = URI();
     return {
 
         url: _url.toString(),
@@ -11,7 +11,8 @@ export function AccountSettings() {
          *
          */
         init: function (root) {
-            _url.segment(root + 'account/settings');
+            _url.pathname(root);
+            _url.segment('account/products');
         },
 
         /**
@@ -32,7 +33,6 @@ export function AccountSettings() {
             })
                 .then(checkStatus)
                 .then(parseJSON)
-                .then(promisifyJSON)
                 .catch(handleError);
             
         },
@@ -47,7 +47,6 @@ export function AccountSettings() {
             })
                 .then(checkStatus)
                 .then(parseJSON)
-                .then(promisifyJSON)
                 .catch(handleError);
         }
     };

@@ -18,10 +18,6 @@ function formatJSON(json) {
   };
 }
 
-function promisifyJSON(json) {
-  return nnPromise.resolve(json);
-}
-
 function handleError(error) {
     console.log('request faild', error);
 }

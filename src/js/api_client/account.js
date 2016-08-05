@@ -3,7 +3,7 @@
  * 						 for client-to-server communication.
  */
 export function Account() {
-	var _url = new URI();
+	var _url = URI();
 	return {
 		url: _url.toString(),
 
@@ -12,7 +12,8 @@ export function Account() {
 		 * @return {Promise} A promise containing the 
 		 */
 		init: function (root) {
-			_url.segment(root + 'account/products');
+			_url.pathname(root);
+            _url.segment('account/products');
 		},
 
 		/**
@@ -27,7 +28,6 @@ export function Account() {
 				.then(checkStatus)
                 .then(parseJSON)
                 .then(formatJSON)
-                .then(promisifyJSON)
                 .catch(handleError);
 		}
 	}
