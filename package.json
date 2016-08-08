@@ -8,7 +8,9 @@
   },
   "devDependencies": {
     "babel-core": "^6.11.4",
+    "babel-plugin-transform-bluebird": "^0.1.1",
     "babel-plugin-undeclared-variables-check": "^6.8.0",
+    "babel-preset-bluebird": "^1.0.0",
     "babel-preset-es2015": "^6.9.0",
     "del": "^2.2.1",
     "gulp": "^3.9.1",

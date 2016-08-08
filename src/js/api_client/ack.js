@@ -1,8 +1,8 @@
 /**
  *
  */
-export function AccountSettings() {
-    var _url = URI('');
+export function Ack() {
+    var _url = URI();
     return {
 
         url: _url.toString(),
@@ -11,8 +11,8 @@ export function AccountSettings() {
          *
          */
         init: function (root) {
-            _url.pathname(root);
-            _url.segment('account/settings');
+            _url.segment(root);
+            _url.segment('acks');
         },
 
         /**
@@ -27,27 +27,15 @@ export function AccountSettings() {
             //myHeaders.append('cache-control', 'cache');
             return fetch(_url.toString(), {
                 credentials: 'same-origin',
-                //cache: 'default',
+                cache: 'default',
                 //mode: 'no-cors',
-                //headers: myHeaders
+                headers: myHeaders
             })
                 .then(checkStatus)
                 .then(parseJSON)
+                .then(promisifyJSON)
                 .catch(handleError);
             
-        },
-
-        /**
-         *
-         */
-        updateSettings: function(settings) {
-            return fetch(_url.toString(), {
-                method: 'POST',
-                body: settings
-            })
-                .then(checkStatus)
-                .then(parseJSON)
-                .catch(handleError);
         }
     };
 }
