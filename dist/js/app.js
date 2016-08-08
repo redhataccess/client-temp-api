@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Account = Account;
 exports.AccountSettings = AccountSettings;
+exports.Ack = Ack;
 
 require('fetch');
 
@@ -75,12 +76,6 @@ function AccountSettings() {
          *
          */
         getSettings: function getSettings() {
-            var myHeaders = new Headers();
-            myHeaders.append('Accept', 'text/plain');
-            myHeaders.append('Accept', 'application/json');
-            myHeaders.append('Accept', '*/*');
-            myHeaders.append('X-Omit', 'WWW-Authenticate');
-            //myHeaders.append('cache-control', 'cache');
             return fetch(_url.toString(), {
                 credentials: 'same-origin'
             }).then(checkStatus).then(parseJSON).catch(handleError);
@@ -97,6 +92,57 @@ function AccountSettings() {
         }
     };
 }
+
+/**
+ *
+ */
+function Ack() {
+    var _url = (0, _urijs2.default)('');
+    return {
+
+        url: _url.toString(),
+
+        /*
+         *
+         */
+        init: function init(root) {
+            _url.segment(root);
+            _url.segment('acks');
+        },
+
+        /**
+         *
+         */
+        getAcks: function getAcks(account) {
+            var _getUrl = _url.clone();
+            _getUrl.addSearch('include', 'rule');
+            if (account) {
+                _getUrl.addSearch('account_number', account);
+            }
+
+            return fetch(_getUrl.toString(), {
+                credentials: 'same-origin'
+            }).then(checkStatus).then(parseJSON).catch(handleError);
+        },
+
+        /**
+         *
+         */
+        createAck: function createAck(account, rule) {
+            var _createUrl = _url.clone();
+            if (account) {
+                _createUrl.addSearch('account_number', account);
+            }
+
+            return fetch(_createUrl.toString(), {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: JSON.stringify(rule)
+            }).then(checkStatus).then(parseJSON).catch(handleError);
+        }
+    };
+}
+
 function checkStatus(response) {
     if (response.status >= 200 && response.status < 300) {
         return _bluebird2.default.resolve(response);

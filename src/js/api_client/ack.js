@@ -2,7 +2,7 @@
  *
  */
 export function Ack() {
-    var _url = URI();
+    var _url = URI('');
     return {
 
         url: _url.toString(),
@@ -18,24 +18,39 @@ export function Ack() {
         /**
          *
          */
-        getSettings: function() {
-            var myHeaders = new Headers();
-            myHeaders.append('Accept', 'text/plain');
-            myHeaders.append('Accept', 'application/json');
-            myHeaders.append('Accept', '*/*');
-            myHeaders.append('X-Omit', 'WWW-Authenticate');
-            //myHeaders.append('cache-control', 'cache');
-            return fetch(_url.toString(), {
-                credentials: 'same-origin',
-                cache: 'default',
-                //mode: 'no-cors',
-                headers: myHeaders
+        getAcks: function(account) {
+            var _getUrl = _url.clone();
+            _getUrl.addSearch('include', 'rule');
+            if (account) {
+                _getUrl.addSearch('account_number', account);
+            }
+
+            return fetch(_getUrl.toString(), {
+                credentials: 'same-origin'
             })
                 .then(checkStatus)
                 .then(parseJSON)
-                .then(promisifyJSON)
                 .catch(handleError);
             
+        },
+
+        /**
+         *
+         */
+        createAck: function(account, rule) {
+            var _createUrl = _url.clone();
+            if (account) {
+                _createUrl.addSearch('account_number', account);
+            }
+
+            return fetch(_createUrl.toString(), {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: JSON.stringify(rule)
+            })
+                .then(checkStatus)
+                .then(parseJSON)
+                .catch(handleError);
         }
     };
 }
