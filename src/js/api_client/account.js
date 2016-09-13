@@ -32,7 +32,7 @@ export function Account() {
 		 */
 		init: function (root, accountNumber) {
 			if (root.substring(0, 1) !== '/')
-				throw 'Root of the path must begin with a /';
+				throw new Error('Root of the path must begin with a /');
 
 			baseQuery.account_number = accountNumber;
 			_url.pathname(root);

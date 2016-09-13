@@ -22,6 +22,8 @@ module.exports = function(config) {
         'bower_components/jasmine-sinon/lib/jasmine-sinon.js',
         'src/js/api_client_test/account_settings.js',
         'tests/js/account_settings_spec.js',
+        'src/js/api_client_test/system.js',
+        'tests/js/system_spec.js',
         'src/js/api_client_test/account.js',
         'tests/js/account_spec.js'
     ],
@@ -47,6 +49,7 @@ module.exports = function(config) {
     preprocessors: {
         'src/js/api_client_test/account_settings.js': ['browserify'],
         'src/js/api_client_test/account.js': ['browserify'],
+        'src/js/api_client_test/system.js': ['browserify'],
         'tests/js/*_spec.js': ['browserify']
     },
 

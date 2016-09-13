@@ -30,12 +30,8 @@ describe('Unit: AccountSettings', function () {
                 }
             };
 
-            console.log(
-                options.credientials 
-                )
-
             if (options && (options.method === 'GET' || !options.method)
-                && options.credientials === getOptions.credentials
+                && options.credentials === getOptions.credentials
                 && URI(validURI).equals(fetchedURI)) {
                 res.status = 200;
                 res.data = 'OK';
@@ -55,12 +51,9 @@ describe('Unit: AccountSettings', function () {
                 }
             };
 
-            console.log('in update validation')
-
             if (options && options.method && options.method === 'POST' 
-                && options.credientials === postOptions.credentials
+                && options.credentials === postOptions.credentials
                 && URI(validURI).equals(fetchedURI) && options.body) {
-                console.log('inside if')
                 res.status = 200;
                 res.data = 'OK';
                 return Promise.resolve(res);
@@ -83,9 +76,7 @@ describe('Unit: AccountSettings', function () {
     it('should get ' + url, function () {
         stubedRequester.and.callFake(requestValidation.getSettings);
         apiService.getSettings().then(function (res) {
-            console.log(res)
-            expect(res.data).toBe('OK');
-            expect(res.status).toBe(200);
+            expect(res).toBe('OK');
             done();
         });
     });
@@ -93,8 +84,7 @@ describe('Unit: AccountSettings', function () {
     it('should post "test" settings', function () {
         stubedRequester.and.callFake(requestValidation.updateSettings)
         apiService.updateSettings(postOptions.Body).then(function (res) {
-            expect(res.data).toBe('OK');
-            expect(res.status).toBe(200);
+            expect(res).toBe('OK');
             done();
         });
     });
