@@ -1,19 +1,17 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+	value: true
 });
-exports.Account = Account;
-exports.AccountSettings = AccountSettings;
-exports.Ack = Ack;
-
-require('fetch');
+exports.System = System;
 
 var _urijs = require('urijs');
 
 var _urijs2 = _interopRequireDefault(_urijs);
 
-require('babel/browser-polyfill');
+var _URITemplate = require('urijs/src/URITemplate');
+
+var _URITemplate2 = _interopRequireDefault(_URITemplate);
 
 var _bluebird = require('bluebird');
 
@@ -21,148 +19,182 @@ var _bluebird2 = _interopRequireDefault(_bluebird);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//polyfill();
-//fetch.Promise = Promise;
-/**
- * @return {JSON} Json object containing the functions needed
- * 						 for client-to-server communication.
- */
-function Account() {
-    var _url = (0, _urijs2.default)('');
-    return {
-        url: _url.toString(),
+Promise = _bluebird2.default;
+Promise.config({
+	warnings: false
+});
+if (!('fetch' in window)) require('fetch');
 
-        /**
-         * @param  {String} root The root of the url path.
-         * @return {Promise} A promise containing the 
-         */
-        init: function init(root) {
-            _url.pathname(root);
-            _url.segment('account/products');
-        },
+function System() {
+	var _url = (0, _urijs2.default)(''),
+	    templateApiModule = new _URITemplate2.default('/{root}/{apiModule}{?account_number,query*}'),
+	    templateId = new _URITemplate2.default('/{root}/{apiModule}/{id}{?account_number,query*}'),
+	    templateEndpoint = new _URITemplate2.default('/{root}/{apiModule}/{id}/{endpoint}{?account_number,query*}'),
+	    templateParams = {
+		root: null,
+		apiModule: 'systems',
+		id: null,
+		endpoint: null,
+		account_number: null,
+		query: null
+	};
 
-        /**
-         * 
-         */
-        getProducts: function getProducts(query) {
-            _url.setQuery(query);
+	return {
 
-            return fetch(_url.toString(), {
-                credentials: 'same-origin'
-            }).then(checkStatus).then(parseJSON).then(formatJSON).catch(handleError);
-        }
-    };
-}
-/**
- *
- */
+		url: _url.toString(),
 
-//import {polyfill} from 'es6-promise';
-function AccountSettings() {
-    var _url = (0, _urijs2.default)('');
-    return {
+		init: function init(root, accountNumber) {
+			templateParams.root = root;
+			templateParams.account_number = accountNumber;
+		},
 
-        url: _url.toString(),
+		getSingleSystem: function getSingleSystem(system_id) {
+			templateParams.id = system_id;
+			templateParams.query = null;
+			_url.href(templateId.expand(templateParams));
+			_url.normalize();
 
-        /*
-         *
-         */
-        init: function init(root) {
-            _url.pathname(root);
-            _url.segment('account/settings');
-        },
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
 
-        /**
-         *
-         */
-        getSettings: function getSettings() {
-            return fetch(_url.toString(), {
-                credentials: 'same-origin'
-            }).then(checkStatus).then(parseJSON).catch(handleError);
-        },
+		getSystemTypes: function getSystemTypes() {
+			_url = (0, _urijs2.default)(templateApiModule.expand({
+				root: templateParms.root,
+				apiModule: 'system_types'
+			}));
+			_url.normalize();
 
-        /**
-         *
-         */
-        updateSettings: function updateSettings(settings) {
-            return fetch(_url.toString(), {
-                method: 'POST',
-                body: settings
-            }).then(checkStatus).then(parseJSON).catch(handleError);
-        }
-    };
-}
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
 
-/**
- *
- */
-function Ack() {
-    var _url = (0, _urijs2.default)('');
-    return {
+		getSystems: function getSystems() {
+			templateParams.query = null;
+			_url.href(templateApiModule.expand(templateParams));
+			_url.normalize();
 
-        url: _url.toString(),
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
 
-        /*
-         *
-         */
-        init: function init(root) {
-            _url.segment(root);
-            _url.segment('acks');
-        },
+		getSystemLinks: function getSystemLinks(parent_system_id, query) {
+			templateParams.id = parent_system_id;
+			templateParams.query = query;
+			templateParams.endpoint = 'links';
 
-        /**
-         *
-         */
-        getAcks: function getAcks(account) {
-            var _getUrl = _url.clone();
-            _getUrl.addSearch('include', 'rule');
-            if (account) {
-                _getUrl.addSearch('account_number', account);
-            }
+			_url.href(templateEndpoint.expand(templateParams));
+			_url.normalize();
 
-            return fetch(_getUrl.toString(), {
-                credentials: 'same-origin'
-            }).then(checkStatus).then(parseJSON).catch(handleError);
-        },
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
 
-        /**
-         *
-         */
-        createAck: function createAck(account, rule) {
-            var _createUrl = _url.clone();
-            if (account) {
-                _createUrl.addSearch('account_number', account);
-            }
+		headSystemsLatest: function headSystemsLatest(query) {
+			templateParams.query = query;
+			_url.href(templateApiModule.expand(templateParams));
+			_url.normalize();
 
-            return fetch(_createUrl.toString(), {
-                method: 'POST',
-                credentials: 'same-origin',
-                body: JSON.stringify(rule)
-            }).then(checkStatus).then(parseJSON).catch(handleError);
-        }
-    };
+			return fetch(_url.toString(), {
+				method: 'HEAD',
+				credentials: 'same-origin'
+			}).then(checkStatus).catch(handleError);
+		},
+
+		getSystemsLatest: function getSystemsLatest(query) {
+			templateParams.query = query;
+			_url.href(templateApiModule.expand(templateParams));
+			_url.normalize();
+
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
+
+		getSystemStatus: function getSystemStatus(query) {
+			templateParams.id = 'status';
+			templateParams.query = query;
+			_url.href(templateId.expand(templateParams));
+			_url.normalize();
+
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
+
+		getSystemSummary: function getSystemSummary(query) {
+			templateParams.query = query;
+			templateParams.query.summary = true;
+			_url.href(templateApiModule.expand(templateParams));
+			_url.normalize();
+
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
+
+		getSystemReports: function getSystemReports(machine_id) {
+			templateParams.id = machine_id;
+			templateParams.endpoint = 'reports';
+			templateParams.query = null;
+			_url.href(templateEndpoint.expand(templateParams));
+			_url.normalize();
+
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
+
+		getSystemMetadata: function getSystemMetadata(machine_id) {
+			templateParams.id = machine_id;
+			templateParams.endpoint = 'metadata';
+			templateParams.query = null;
+			_url.href(templateEndpoint.expand(templateParams));
+			_url.normalize();
+
+			return fetch(_url.toString(), {
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		},
+
+		deleteSystem: function deleteSystem(machine_id) {
+			templateParams.id = machine_id;
+			templateParams.query = null;
+			_url.href(templateId.expand(templateParams));
+			_url.normalize();
+
+			return fetch(_url.toString(), {
+				method: 'DELETE',
+				credentials: 'same-origin'
+			}).then(checkStatus).then(formatJSON).catch(handleError);
+		}
+	};
 }
 
 function checkStatus(response) {
-    if (response.status >= 200 && response.status < 300) {
-        return _bluebird2.default.resolve(response);
-    } else {
-        var error = new Error(response.statusText);
-        error.response = response;
-        throw error;
-    }
+	if (response.status >= 200 && response.status < 300) {
+		return response;
+	} else {
+		var error = new Error(response.statusText);
+		error.response = response;
+		return Promise.reject(error);
+	}
 }
 
 function parseJSON(response) {
-    return response.json();
+	return response.json();
 }
 
-function formatJSON(json) {
-    return {
-        data: json
-    };
+function formatJSON(response) {
+	response.data = response.json();
+	return response;
 }
 
 function handleError(error) {
-    console.log('request faild', error);
+	console.log('request failed', error.statusText);
+	throw error;
 }
